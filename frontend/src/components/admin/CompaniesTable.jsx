@@ -10,17 +10,16 @@ const CompaniesTable = () => {
     const { companies, searchCompanyByText } = useSelector(store => store.company);
     const [filterCompany, setFilterCompany] = useState(companies);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        const filteredCompany = companies.length >= 0 && companies.filter((company) => {
-            if (!searchCompanyByText) {
-                return true;
+    useEffect(()=>{
+        const filteredCompany = companies.length >= 0 && companies.filter((company)=>{
+            if(!searchCompanyByText){
+                return true
             };
             return company?.name?.toLowerCase().includes(searchCompanyByText.toLowerCase());
+
         });
         setFilterCompany(filteredCompany);
-    }, [companies, searchCompanyByText]);
-
+    },[companies,searchCompanyByText])
     return (
         <div>
             <Table>
@@ -30,48 +29,33 @@ const CompaniesTable = () => {
                         <TableHead>Logo</TableHead>
                         <TableHead>Name</TableHead>
                         <TableHead>Date</TableHead>
-                        <TableHead>User</TableHead> {/* New column for user */}
                         <TableHead className="text-right">Action</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {
                         filterCompany?.map((company) => (
-                            <TableRow key={company._id}> {/* Added unique key */}
+                            <tr>
                                 <TableCell>
                                     <Avatar>
-                                        <AvatarImage src={company.logo} />
+                                        <AvatarImage src={company.logo}/>
                                     </Avatar>
                                 </TableCell>
                                 <TableCell>{company.name}</TableCell>
                                 <TableCell>{company.createdAt.split("T")[0]}</TableCell>
-                                <TableCell>
-                                    <div className="flex items-center gap-2">
-                                        {/* Assuming company.createdBy is the user object */}
-                                        {company.createdBy?.avatar ? (
-                                            <Avatar>
-                                                <AvatarImage src={company.createdBy.avatar} />
-                                            </Avatar>
-                                        ) : (
-                                            <Avatar>
-                                                <AvatarImage src="/default-avatar.png" /> {/* Fallback avatar */}
-                                            </Avatar>
-                                        )}
-                                        <span>{company.createdBy?.name || "Unknown User"}</span> {/* Display user name */}
-                                    </div>
-                                </TableCell>
                                 <TableCell className="text-right cursor-pointer">
                                     <Popover>
                                         <PopoverTrigger><MoreHorizontal /></PopoverTrigger>
                                         <PopoverContent className="w-32">
-                                            <div onClick={() => navigate(`/admin/companies/${company._id}`)} className='flex items-center gap-2 w-fit cursor-pointer'>
+                                            <div onClick={()=> navigate(`/admin/companies/${company._id}`)} className='flex items-center gap-2 w-fit cursor-pointer'>
                                                 <Edit2 className='w-4' />
                                                 <span>Edit</span>
                                             </div>
                                         </PopoverContent>
                                     </Popover>
                                 </TableCell>
-                            </TableRow>
+                            </tr>
+
                         ))
                     }
                 </TableBody>
@@ -80,4 +64,4 @@ const CompaniesTable = () => {
     )
 }
 
-export default CompaniesTable;
+export default CompaniesTable
